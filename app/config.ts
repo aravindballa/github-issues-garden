@@ -1,4 +1,4 @@
 export default {
-    repo: 'aravindballa/public-notes',
-    title: 'Notes',
+  repo: "aravindballa/public-garden",
+  title: "Notes",
 } as const;
