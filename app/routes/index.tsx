@@ -2,8 +2,16 @@ import { useLoaderData } from "@remix-run/react";
 import type { LoaderFunction } from "@remix-run/server-runtime";
 import { json } from "@remix-run/server-runtime";
 import { gql } from "@urql/core";
+import { marked } from "marked";
+
 import config from "~/config";
 import client from "~/graphql.server";
+import { getAllPosts } from "~/lib.server";
+
+type LoaderData = {
+  bodyHTML: string;
+  updatedAt: string;
+};
 
 const QUERY = gql`
   query Homepage($issueQuery: String!) {
@@ -14,7 +22,7 @@ const QUERY = gql`
           ... on Issue {
             id
             title
-            bodyHTML
+            body
             updatedAt
           }
         }
@@ -24,23 +32,32 @@ const QUERY = gql`
 `;
 
 export const loader: LoaderFunction = async () => {
-  const { data, error, operation } = await client
-    .query(QUERY, { issueQuery: `repo:${config.repo} label:homepage` })
+  const allPostsMap = await getAllPosts();
+  const { data } = await client
+    .query(QUERY, {
+      issueQuery: `repo:${config.repo} label:homepage label:post`,
+    })
     .toPromise();
 
-  const { bodyHTML, updatedAt } = data.search.edges[0].node;
+  let { body, updatedAt } = data.search.edges[0].node;
 
-  return json({ data: { bodyHTML, updatedAt } });
+  body = body.replace(/#([0-9]+)/, (match: string, issueNumber: string) => {
+    const post = allPostsMap?.[parseInt(issueNumber)];
+    if (post) {
+      return `[${post.title}](/${post.number})`;
+    }
+    return match;
+  });
+
+  return json({ bodyHTML: marked(body), updatedAt } as LoaderData);
 };
 
 export default function Index() {
-  const { data } = useLoaderData();
+  const { bodyHTML } = useLoaderData() as LoaderData;
   return (
-    <div className="content-wrap">
-      <article>
-        <h1>{config.title}</h1>
-        <div dangerouslySetInnerHTML={{ __html: data.bodyHTML }}></div>
-      </article>
-    </div>
+    <article>
+      <h1>{config.title}</h1>
+      <div dangerouslySetInnerHTML={{ __html: bodyHTML }}></div>
+    </article>
   );
 }

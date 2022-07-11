@@ -8,15 +8,20 @@ import {
   ScrollRestoration,
 } from "@remix-run/react";
 import styles from "~/style.css";
+import config from "./config";
 
 export const meta: MetaFunction = () => ({
   charset: "utf-8",
-  title: "Notes",
+  title: config.title,
+  description: config.description,
   viewport: "width=device-width,initial-scale=1",
 });
 
 export const links: LinksFunction = () => [
-  { rel: "stylesheet", href: "https://unpkg.com/mvp.css" },
+  {
+    rel: "stylesheet",
+    href: "https://cdn.jsdelivr.net/npm/water.css@2/out/water.css",
+  },
   { rel: "stylesheet", href: styles },
 ];
 

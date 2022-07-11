@@ -1,5 +1,5 @@
 {
-  "name": "notes-from-issues",
+  "name": "github-issues-garden",
   "private": true,
   "description": "",
   "license": "",
@@ -18,13 +18,16 @@
     "cross-env": "^7.0.3",
     "graphql": "^16.5.0",
     "isbot": "^3.4.6",
+    "marked": "^4.0.17",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
+    "react-markdown": "^8.0.3",
     "tiny-invariant": "^1.2.0"
   },
   "devDependencies": {
     "@remix-run/dev": "experimental-netlify-edge",
     "@remix-run/eslint-config": "experimental-netlify-edge",
+    "@types/marked": "^4.0.3",
     "@types/react": "^18.0.5",
     "@types/react-dom": "^18.0.1",
     "eslint": "^8.11.0",
