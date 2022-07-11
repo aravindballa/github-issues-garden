@@ -2,6 +2,8 @@
 
 A digital garden using GitHub Issues as CMS.
 
+![github-issues-garden](https://user-images.githubusercontent.com/8036315/178200007-ea373594-69f5-4285-a700-ecc89f8a7b2c.png)
+
 Built using
 
 - Remix Run
